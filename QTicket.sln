@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31019.35
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QTicket.api", "QTicket.api\QTicket.api.csproj", "{BCD48F88-D8BB-48B1-9F26-59586DA5D623}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCD48F88-D8BB-48B1-9F26-59586DA5D623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD48F88-D8BB-48B1-9F26-59586DA5D623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD48F88-D8BB-48B1-9F26-59586DA5D623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD48F88-D8BB-48B1-9F26-59586DA5D623}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {628457AD-11BC-4467-BA2F-D484DFBB55B1}
+	EndGlobalSection
+EndGlobal
