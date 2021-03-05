@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using QTicket.api.Models;
 using QTicket.api.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace QTicket.api.Controllers
 {
