@@ -9,7 +9,7 @@ import { Ticket } from '../../classes/tickets';
   styleUrls: ['./right-content.component.css']
 })
 export class RightContentComponent implements OnInit {
-  ticketList;
+  ticketList: any;
 
   constructor(private _dataService: InMemoryDataService) { }
 
@@ -18,12 +18,14 @@ export class RightContentComponent implements OnInit {
   }
 
   showConfig() {
-    this._dataService.getConfig()
-      .subscribe((data: Ticket) => this.ticketList = {
-          heroesUrl: data.id,
-          ticketNumber:  data.ticketNumber,
-          dateCreated: data.dateCreated,
+    this._dataService.getConfig().subscribe((result) => {
+        this.ticketList = result;
       });
+      
+  }
+
+  onAssign(item) {
+    console.log(item);
   }
 
 }

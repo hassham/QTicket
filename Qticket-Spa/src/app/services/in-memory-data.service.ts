@@ -7,12 +7,13 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class InMemoryDataService {
-  configUrl = 'https://localhost:44337/api/tickets';
+  configUrl = 'http://localhost:61598/api/tickets/GetUnassignedTickets';
 
   constructor(private http: HttpClient) {
   }
 
   getConfig() {
+
     return this.http.get(this.configUrl);
   }
 }

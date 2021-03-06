@@ -120,5 +120,8 @@
       }
     }
   },
-  "defaultProject": "QTicket-Spa"
+  "defaultProject": "QTicket-Spa",
+  "cli": {
+    "analytics": false
+  }
 }

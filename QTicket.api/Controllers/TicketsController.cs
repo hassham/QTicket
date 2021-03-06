@@ -25,6 +25,15 @@ namespace QTicket.api.Controllers
         public ActionResult<List<ServiceTicket>> Get() =>
             _ticketService.Get();
 
+        [HttpGet]
+        [Route("GetUnassignedTickets")]
+        public ActionResult<List<ServiceTicket>> GetUnassignedTickets()
+        {
+            var tickets = _ticketService.GetUnassignedTickets();
+
+            return tickets;
+        }
+
         [HttpGet("{id:length(24)}", Name = "GetTicket")]
         public ActionResult<ServiceTicket> Get(string id)
         {

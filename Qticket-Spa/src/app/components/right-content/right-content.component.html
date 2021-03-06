@@ -3,8 +3,8 @@
     <ul class="list-unstyled components mb-5">
 
       <li *ngFor="let ticket of ticketList">
-        <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false">{{ticket.ticketNumber}}</a>
-      
+        <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false">{{ ("0000" + ticket.ticketNumber).slice(-4)}}</a>
+        <button (click)="onAssign(ticket.ticketNumber)">Pick</button>
       </li>
       
     </ul>

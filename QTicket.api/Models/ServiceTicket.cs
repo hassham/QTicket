@@ -14,6 +14,9 @@ namespace QTicket.api.Models
         public string Id { get; set; }
         public int TicketNumber { get; set; }
         public DateTime DateCreated { get; set; }
-
+        public int Status { get; set; }
+        public int CounterId { get; set; }
+        public DateTime DateUpdated { get; set; }
+        public string AssignedToUserId { get; set; }
     }
 }

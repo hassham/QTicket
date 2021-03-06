@@ -36,6 +36,11 @@ namespace QTicket.api.Services
 
         public void Remove(string id) => _serviceTicket.DeleteOne(serviceTicket => serviceTicket.Id == id);
 
+        public List<ServiceTicket> GetUnassignedTickets()
+        {
+            return _serviceTicket.Find<ServiceTicket>(x => x.Status == 1 && string.IsNullOrEmpty(x.AssignedToUserId)).ToList();
+        }
+
         public ServiceTicket GetNextServiceTicket()
         {
             ServiceTicket newTicket = new ServiceTicket();
@@ -51,6 +56,7 @@ namespace QTicket.api.Services
                 ServiceTicket ticket = new ServiceTicket();
                 ticket.TicketNumber = 1;
                 ticket.DateCreated = DateTime.Now;
+                ticket.Status = 1;
                 newTicket = Create(ticket);
             }
             else
@@ -58,6 +64,7 @@ namespace QTicket.api.Services
                 ServiceTicket ticket = new ServiceTicket();
                 ticket.TicketNumber = lastTicket.TicketNumber + 1;
                 ticket.DateCreated = DateTime.Now;
+                ticket.Status = 1;
                 newTicket = Create(ticket);
             }
 
