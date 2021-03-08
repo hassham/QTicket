@@ -20,6 +20,8 @@ export class RightContentComponent implements OnInit {
   showConfig() {
     this._dataService.getConfig().subscribe((result) => {
         this.ticketList = result;
+      }, error => {
+        console.log(error);
       });
       
   }

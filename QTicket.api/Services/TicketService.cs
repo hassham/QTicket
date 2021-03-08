@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using QTicket.api.Models;
+using QTicket.api.Entities;
 
 namespace QTicket.api.Services
 {
@@ -17,38 +17,36 @@ namespace QTicket.api.Services
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _serviceTicket = database.GetCollection<ServiceTicket>(settings.CollectionName);
+            _serviceTicket = database.GetCollection<ServiceTicket>("ServiceTickets");
         }
 
-        public List<ServiceTicket> Get() => _serviceTicket.Find(serviceTicket => true).ToList();
+        public async Task<List<ServiceTicket>> Get() => await _serviceTicket.Find(serviceTicket => true).ToListAsync();
 
-        public ServiceTicket Get(string id) => _serviceTicket.Find<ServiceTicket>(serviceTicket => serviceTicket.Id == id).FirstOrDefault();
+        public async Task<ServiceTicket> Get(string id) => await _serviceTicket.Find<ServiceTicket>(serviceTicket => serviceTicket.Id == id).FirstOrDefaultAsync();
 
-        public ServiceTicket Create(ServiceTicket serviceTicket)
+
+        public async Task<ServiceTicket> Create(ServiceTicket serviceTicket)
         {
-            _serviceTicket.InsertOne(serviceTicket);
+            await _serviceTicket.InsertOneAsync(serviceTicket);
             return serviceTicket;
         }
 
-        public void Update(string id, ServiceTicket serviceTicketIn) => _serviceTicket.ReplaceOne(serviceTicket => serviceTicket.Id == id, serviceTicketIn);
+        public async Task Update(string id, ServiceTicket serviceTicketIn) => await _serviceTicket.ReplaceOneAsync(serviceTicket => serviceTicket.Id == id, serviceTicketIn);
 
-        public void Remove(ServiceTicket serviceTicketIn) => _serviceTicket.DeleteOne(serviceTicket => serviceTicket.Id == serviceTicketIn.Id);
+        public async Task Remove(ServiceTicket serviceTicketIn) => await _serviceTicket.DeleteOneAsync(serviceTicket => serviceTicket.Id == serviceTicketIn.Id);
 
-        public void Remove(string id) => _serviceTicket.DeleteOne(serviceTicket => serviceTicket.Id == id);
+        public async Task Remove(string id) => await _serviceTicket.DeleteOneAsync(serviceTicket => serviceTicket.Id == id);
 
-        public List<ServiceTicket> GetUnassignedTickets()
+        public async Task <List<ServiceTicket>> GetUnassignedTickets()
         {
-            return _serviceTicket.Find<ServiceTicket>(x => x.Status == 1 && string.IsNullOrEmpty(x.AssignedToUserId)).ToList();
+            return await _serviceTicket.Find<ServiceTicket>(x => x.Status == 1 && string.IsNullOrEmpty(x.AssignedToUserId)).ToListAsync();
         }
 
-        public ServiceTicket GetNextServiceTicket()
+        public async Task<ServiceTicket> GetNextServiceTicket()
         {
             ServiceTicket newTicket = new ServiceTicket();
 
-            //var lastTicket = (from ticket in _serviceTicket.AsQueryable<ServiceTicket>()
-            //                orderby ticket.TicketNumber 
-            //                select ticket).FirstOrDefault();
-            var lastTicket = _serviceTicket.AsQueryable<ServiceTicket>().OrderByDescending(x => x.TicketNumber).FirstOrDefault();
+            var lastTicket = await _serviceTicket.AsQueryable<ServiceTicket>().OrderByDescending(x => x.TicketNumber).FirstOrDefaultAsync();
 
 
             if (lastTicket == null)
@@ -57,7 +55,7 @@ namespace QTicket.api.Services
                 ticket.TicketNumber = 1;
                 ticket.DateCreated = DateTime.Now;
                 ticket.Status = 1;
-                newTicket = Create(ticket);
+                newTicket = await Create(ticket);
             }
             else
             {
@@ -65,7 +63,7 @@ namespace QTicket.api.Services
                 ticket.TicketNumber = lastTicket.TicketNumber + 1;
                 ticket.DateCreated = DateTime.Now;
                 ticket.Status = 1;
-                newTicket = Create(ticket);
+                newTicket = await Create(ticket);
             }
 
             return newTicket;

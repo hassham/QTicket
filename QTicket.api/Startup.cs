@@ -6,8 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Cors;
-using QTicket.api.Models;
 using QTicket.api.Services;
+using QTicket.api.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace QTicket.api
 {
@@ -28,11 +31,26 @@ namespace QTicket.api
 
             services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
-            services.AddSingleton<TicketService>();
+            services.AddScoped<TicketService>();
+
+            services.AddScoped<AppUserService>();
+
+            services.AddScoped<TokenService>();
 
             services.AddControllers();
 
             services.AddCors();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"])),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +61,6 @@ namespace QTicket.api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                );
             //.SetIsOriginAllowed(origin => true) // allow any origin
             //.AllowCredentials()); // allow credentials
 
@@ -55,7 +68,11 @@ namespace QTicket.api
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+
+            app.UseAuthentication();
+                
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

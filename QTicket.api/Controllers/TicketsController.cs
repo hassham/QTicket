@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using QTicket.api.Models;
 using QTicket.api.Services;
 using Microsoft.AspNetCore.Cors;
+using QTicket.api.Entities;
 
 namespace QTicket.api.Controllers
 {
@@ -22,22 +22,20 @@ namespace QTicket.api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<ServiceTicket>> Get() =>
-            _ticketService.Get();
+        public async Task<ActionResult<List<ServiceTicket>>> Get() =>
+            await _ticketService.Get();
 
         [HttpGet]
         [Route("GetUnassignedTickets")]
-        public ActionResult<List<ServiceTicket>> GetUnassignedTickets()
+        public async Task<ActionResult<List<ServiceTicket>>> GetUnassignedTickets()
         {
-            var tickets = _ticketService.GetUnassignedTickets();
-
-            return tickets;
+            return await _ticketService.GetUnassignedTickets();
         }
 
         [HttpGet("{id:length(24)}", Name = "GetTicket")]
-        public ActionResult<ServiceTicket> Get(string id)
+        public async Task<ActionResult<ServiceTicket>> Get(string id)
         {
-            var ticket = _ticketService.Get(id);
+            var ticket = await _ticketService.Get(id);
 
             if (ticket == null)
             {
@@ -48,50 +46,48 @@ namespace QTicket.api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ServiceTicket> Create(ServiceTicket ticket)
+        public async Task<ActionResult<ServiceTicket>> Create(ServiceTicket ticket)
         {
-            _ticketService.Create(ticket);
+            await _ticketService.Create(ticket);
 
             return CreatedAtRoute("GetTicket", new { id = ticket.Id.ToString() }, ticket);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, ServiceTicket ticketIn)
+        public async Task<IActionResult> Update(string id, ServiceTicket ticketIn)
         {
-            var ticket = _ticketService.Get(id);
+            var ticket = await _ticketService.Get(id);
 
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _ticketService.Update(id, ticketIn);
+            await _ticketService.Update(id, ticketIn);
 
             return NoContent();
         }
 
         [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var ticket = _ticketService.Get(id);
+            var ticket = await _ticketService.Get(id);
 
             if (ticket == null)
             {
                 return NotFound();
             }
 
-            _ticketService.Remove(ticket.Id);
+            await _ticketService.Remove(ticket.Id);
 
             return NoContent();
         }
 
         [HttpGet]
         [Route("GetNextTicket")]
-        public ActionResult<ServiceTicket> GetNextTicket()
+        public async Task<ActionResult<ServiceTicket>> GetNextTicket()
         {
-            var ticket = _ticketService.GetNextServiceTicket();
-
-            return ticket;
+            return await _ticketService.GetNextServiceTicket();
         }
     }
 }

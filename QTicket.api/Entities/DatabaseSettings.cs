@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace QTicket.api.Models
+namespace QTicket.api.Entities
 {
     public class DatabaseSettings : IDatabaseSettings
     {

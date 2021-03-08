@@ -13,7 +13,6 @@ export class InMemoryDataService {
   }
 
   getConfig() {
-
     return this.http.get(this.configUrl);
   }
 }
